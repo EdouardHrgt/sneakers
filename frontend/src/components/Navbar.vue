@@ -1,19 +1,25 @@
 <template>
   <div>
-    <div class="filter" v-show="menu"></div>
+    <div class="filter" :class="{ activeFilter: isActive }" v-show="isActive"></div>
     <header>
       <nav>
-        <div class="menu_mobile"><img src="../assets/icon-menu.svg" alt="Open the menu" /></div>
-        <div class="close_menu_mobile" v-show="menu">
-          <img src="../assets/icon-close.svg" alt="Close the menu" />
+        <div class="menu_mobile">
+          <img src="../assets/icon-menu.svg" alt="Open the menu" @click="toggleMenu()" />
+        </div>
+        <div class="close_menu_mobile" v-show="isActive" :class="{ activeList: isActive }">
+          <img src="../assets/icon-close.svg" alt="Close the menu" @click="toggleMenu()" />
         </div>
         <h1><img src="../assets/logo.svg" alt="sneakers logo" /></h1>
-        <ul>
-          <li><router-link to="/collections">Collections</router-link></li>
-          <li><router-link to="/men">Men</router-link></li>
-          <li><router-link to="/women">Women</router-link></li>
-          <li><router-link to="/about">About</router-link></li>
-          <li><router-link to="/contact">Contact</router-link></li>
+        <ul :class="{ active: isActive }">
+          <li :class="{ activeList: isActive }">
+            <router-link to="/collections">Collections</router-link>
+          </li>
+          <li :class="{ activeList: isActive }"><router-link to="/men">Men</router-link></li>
+          <li :class="{ activeList: isActive }"><router-link to="/women">Women</router-link></li>
+          <li :class="{ activeList: isActive }"><router-link to="/about">About</router-link></li>
+          <li :class="{ activeList: isActive }">
+            <router-link to="/contact">Contact</router-link>
+          </li>
         </ul>
       </nav>
 
@@ -51,17 +57,30 @@ export default {
       itemList: [],
       menu: false,
       showCart: false,
+      isActive: false,
     };
   },
   methods: {
     toggleCart() {
       this.showCart ? (this.showCart = false) : (this.showCart = true);
     },
+    toggleMenu() {
+      this.isActive ? (this.isActive = false) : (this.isActive = true);
+    },
   },
 };
 </script>
 
 <style scoped>
+.active {
+  animation: slideIn 0.5s ease-in-out forwards;
+}
+.activeList {
+  animation: fadeIn 1.5s 0.5s ease forwards;
+}
+.activeFilter {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
 header,
 nav,
 nav ul,
@@ -73,6 +92,10 @@ nav ul,
 .close_menu_mobile,
 .filter {
   display: none;
+}
+.filter,
+.close_menu_mobile {
+  opacity: 0;
 }
 header {
   width: var(--desktop-width);
@@ -162,6 +185,22 @@ nav li a {
   outline: 1px solid var(--orange);
   border-radius: 50%;
 }
+@keyframes slideIn {
+  from {
+    left: -1000px;
+  }
+  to {
+    left: 0px;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 @media screen and (max-width: 1450px) {
   header {
     width: 90%;
@@ -204,7 +243,6 @@ nav li a {
     align-items: baseline;
     justify-content: baseline;
     padding-top: 6rem;
-    
   }
   nav li {
     margin: 0;
@@ -214,6 +252,7 @@ nav li a {
     align-items: center;
     color: var(--black);
     font-weight: var(--weight-2);
+    opacity: 0;
   }
   .filter {
     display: inline-block;
