@@ -31,7 +31,7 @@
           </div>
           <div class="cart_list" v-show="showCart">
             <strong>Cart</strong>
-            <p v-if="itemList.length == 0">Your cart is empty.</p>
+            <p v-if="itemList.length === 0">Your cart is empty.</p>
             <CartItem v-if="itemList.length > 0" />
           </div>
         </div>
@@ -203,12 +203,12 @@ nav li a {
 }
 @media screen and (max-width: 1450px) {
   header {
-    width: 90%;
+    width: var(--breakpoint-1);
   }
 }
 @media screen and (max-width: 1024px) {
   header {
-    width: 100%;
+    width: var(--breakpoint-2);
   }
   .cart_list {
     right: 10px;
@@ -267,7 +267,6 @@ nav li a {
     top: 105px;
     transform: translateX(50%);
     width: 95%;
-    display: none;
   }
 }
 </style>

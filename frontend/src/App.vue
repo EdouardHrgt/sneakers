@@ -17,6 +17,7 @@
   --white: hsl(0, 0%, 100%);
   --black: hsl(0, 0%, 0%);
   --transp-black: rgba(0, 0, 0, 0.75);
+  --transp-orange: rgba(255, 125, 26, 0.3);
   /* TYPO */
   --font-size: 16px;
   --font: 'Kumbh Sans', sans-serif;
@@ -24,6 +25,12 @@
   --weight-2: 700;
   /* SIZES */
   --desktop-width: 1440px;
+  --breakpoint-1: 90%;
+  --breakpoint-2: 100%;
+  --desktop-large-img: 475px;
+  --desktop-small-img: 100px;
+  --large-img-breakpoint-1: 375px;
+  --small-img-breakpoint-1: 85px;
 }
 * {
   margin: 0;

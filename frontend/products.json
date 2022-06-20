@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Chossures",
+        "price": 10,
+        "infos": "Superber paire de baskets !",
+        "sizes": [38,39,40,41,42,43,44,45,46],
+        "pictures": "../frontend/src/assets/image-product-1.jpg"
+    },
+    {
+        "name": "Sabots",
+        "price": 10,
+        "infos": "Sabots en bois très fermes, idéal pour punir un enfant mal poli et désobéissant !",
+        "sizes": [38,39,40,41,42,43,44,45,46],
+        "pictures": "../frontend/src/assets/image-product-2.jpg"
+    },
+    {
+        "name": "Bottes",
+        "price": 10,
+        "infos": "Pair de bottes hautes en cui noir, semelle renforcée.",
+        "sizes": [38,39,40,41,42,43,44,45,46],
+        "pictures": "../frontend/src/assets/image-product-4.jpg"
+    }
+]
