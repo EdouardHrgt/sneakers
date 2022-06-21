@@ -9,7 +9,9 @@
         <div class="close_menu_mobile" v-show="isActive" :class="{ activeList: isActive }">
           <img src="../assets/icon-close.svg" alt="Close the menu" @click="toggleMenu()" />
         </div>
-        <h1><img src="../assets/logo.svg" alt="sneakers logo" /></h1>
+        <h1>
+          <router-link to="/"><img src="../assets/logo.svg" alt="sneakers logo" /></router-link>
+        </h1>
         <ul :class="{ active: isActive }">
           <li :class="{ activeList: isActive }">
             <router-link to="/collections">Collections</router-link>
@@ -218,7 +220,7 @@ nav li a {
 @media screen and (max-width: 800px) {
   .menu_mobile {
     display: inline-block;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
     padding-top: 2px;
     cursor: pointer;
   }

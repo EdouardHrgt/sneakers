@@ -1,46 +1,98 @@
 <template>
-  <div class="product_wrapper">
-    <section class="images_wrapper">
-      <div class="image_big_wrapper">
-        <img src="../assets/image-product-1.jpg" alt="chaussures" />
-      </div>
-      <div class="image_thumbnail_wrapper">
-        <img src="../assets/image-product-1-thumbnail.jpg" alt="thumb" />
-        <img src="../assets/image-product-2-thumbnail.jpg" alt="thumb" />
-        <img src="../assets/image-product-3-thumbnail.jpg" alt="thumb" />
-        <img src="../assets/image-product-4-thumbnail.jpg" alt="thumb" />
-      </div>
-    </section>
-    <section class="datas_wrapper">
-      <h1>sneakers company</h1>
-      <h2>Fall Limited Edition Sneakers</h2>
-      <p class="description">
-        These low-profile sneakers are your perfect casual wear companion. Featuring a durable
-        rubber outer sole, they’ll withstand everything the weather can offer.
-      </p>
-      <p class="reduced_price">
-        <strong>$125.00</strong>
-        <span>50%</span>
-      </p>
-      <p class="original_price">$250</p>
-      <div class="cart_wrapper">
-        <div class="add_remove_item">
-          <img src="../assets/icon-minus.svg" alt="remove 1 to quantity" />
-          <p class="quantity">0</p>
-          <img src="../assets/icon-plus.svg" alt="add 1 to quantity" />
+  <div>
+    <div class="overlay" v-show="caroussel"></div>
+    <main class="product_wrapper" v-for="item in items" :key="item.name">
+      <section class="images_wrapper">
+        <div class="image_big_wrapper">
+          <div class="caroussel_closer" v-show="caroussel"></div>
+          <img src="../assets/image-product-1.jpg" alt="chaussures" />
+
+          <div class="carroussel_swappers" v-show="caroussel">
+            <div class="circle previous"></div>
+            <div class="circle next"></div>
+          </div>
         </div>
-        <button>
-          <img src="../assets/icon-cart.svg" alt="" />
-          Add to cart
-        </button>
-      </div>
-    </section>
+        <div class="image_thumbnail_wrapper">
+          <img src="../assets/image-product-1-thumbnail.jpg" alt="thumb" />
+          <img src="../assets/image-product-2-thumbnail.jpg" alt="thumb" />
+          <img src="../assets/image-product-3-thumbnail.jpg" alt="thumb" />
+          <img src="../assets/image-product-4-thumbnail.jpg" alt="thumb" />
+        </div>
+      </section>
+      <section class="datas_wrapper">
+        <h1>{{ item.brand }}</h1>
+        <h2>{{ item.name }}</h2>
+        <p class="description">
+          {{ item.infos }}
+        </p>
+        <p class="reduced_price">
+          <strong>$125.00</strong>
+          <span>50%</span>
+        </p>
+        <p class="original_price">${{ item.price }}</p>
+        <div class="cart_wrapper">
+          <div class="add_remove_item">
+            <img src="../assets/icon-minus.svg" alt="remove 1 to quantity" @click="decrementCart" />
+            <p class="quantity">{{ itemQty }}</p>
+            <img src="../assets/icon-plus.svg" alt="add 1 to quantity" @click="incrementCart" />
+          </div>
+          <button @click="addToCart">
+            <img src="../assets/icon-cart.svg" alt="Add to Cart" />
+            Add to cart
+          </button>
+        </div>
+        <div class="err_msg" v-show="errMsg">
+          <p>{{ errMsg }}</p>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Product',
+  data() {
+    return {
+      itemQty: 0,
+      caroussel: false,
+      errMsg: '',
+      items: [],
+    };
+  },
+  mounted() {
+    axios
+      .get('http://localhost:8080/static/items.json')
+      .then((res) => (this.items = res.data))
+      .catch((err) => alert(err));
+  },
+  methods: {
+    incrementCart() {
+      if (this.itemQty === 10) {
+        this.errMsg = "You can't add more than 10";
+      } else {
+        this.errMsg = '';
+        this.itemQty += 1;
+      }
+    },
+    decrementCart() {
+      if (this.itemQty === 0) {
+        this.errMsg = "You can't go under 0";
+      } else {
+        this.errMsg = '';
+        this.itemQty -= 1;
+      }
+    },
+    addToCart() {
+      if (this.itemQty > 10 || this.itemQty <= 0) {
+        this.errMsg = 'unable to save this value to cart';
+      } else {
+        this.errMsg = '';
+        alert('cart saved');
+      }
+    },
+  },
 };
 </script>
 
@@ -52,12 +104,18 @@ export default {
   padding: 5rem;
   display: flex;
 }
+.overlay {
+  background-color: var(--transp-black);
+  position: fixed;
+  inset: 0;
+}
 /*ALL ABOUT images section (left side)*/
 img {
   border-radius: 15px;
 }
 .images_wrapper {
   width: var(--desktop-large-img);
+  position: relative;
 }
 .image_big_wrapper {
   width: inherit;
@@ -65,6 +123,51 @@ img {
 .image_big_wrapper img {
   width: inherit;
   object-fit: cover;
+}
+.caroussel_closer,
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+.caroussel_closer {
+  width: 30px;
+  height: 30px;
+  background-image: url(../assets/icon-close.svg);
+  position: absolute;
+  right: 0;
+  top: -40px;
+  transition: 0.4s;
+}
+.caroussel_closer:hover {
+  transform: scale(1.2);
+}
+.carroussel_swappers {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 35%;
+  left: -25px;
+  right: -25px;
+}
+.circle {
+  background-color: var(--white);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.previous {
+  background-image: url(../assets/icon-previous.svg);
+}
+.next {
+  background-image: url(../assets/icon-next.svg);
+}
+.circle:hover {
+  outline: 2px solid var(--orange);
 }
 .image_thumbnail_wrapper {
   margin-top: 1rem;
@@ -163,6 +266,10 @@ img {
 }
 .cart_wrapper button img {
   margin-right: 1rem;
+}
+.err_msg {
+  color: var(--orange);
+  margin-top: 1rem;
 }
 @media screen and (max-width: 1450px) {
   .product_wrapper {

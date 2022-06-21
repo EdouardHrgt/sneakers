@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <section>
+    <main>
       <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum fuga voluptates adipisci
         sapiente eius sunt molestiae consequuntur, esse praesentium aspernatur maiores quos, debitis
@@ -13,7 +13,7 @@
         itaque exercitationem qui voluptatibus voluptates quod facilis suscipit, natus alias illum,
         nesciunt dolores cumque tempora dolore totam.
       </p>
-    </section>
+    </main>
   </div>
 </template>
 
@@ -27,3 +27,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+main {
+  width: var(--desktop-width);
+  margin: auto;
+  margin-top: 3rem;
+}
+main p {
+  width: 70%;
+  line-height: 150%;
+}
+</style>
