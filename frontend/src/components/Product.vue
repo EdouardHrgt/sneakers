@@ -1,22 +1,38 @@
 <template>
   <div>
-    <div class="overlay" v-show="caroussel"></div>
+    <div class="overlay" v-show="caroussel" @click="caroussel = !caroussel"></div>
     <main class="product_wrapper" v-for="item in items" :key="item.name">
-      <section class="images_wrapper">
+      <section class="images_wrapper" :class="{ active: caroussel }">
         <div class="image_big_wrapper">
-          <div class="caroussel_closer" v-show="caroussel"></div>
-          <img src="../assets/image-product-1.jpg" alt="chaussures" />
+          <div class="caroussel_closer" v-show="caroussel" @click="carousselImg()"></div>
+          <img :src="picture" alt="a pair of sneakers" @click="caroussel = !caroussel" />
 
           <div class="carroussel_swappers" v-show="caroussel">
-            <div class="circle previous"></div>
-            <div class="circle next"></div>
+            <div class="circle previous" @click="carousselSlides(-1)"></div>
+            <div class="circle next" @click="carousselSlides(1)"></div>
           </div>
         </div>
         <div class="image_thumbnail_wrapper">
-          <img src="../assets/image-product-1-thumbnail.jpg" alt="thumb" />
-          <img src="../assets/image-product-2-thumbnail.jpg" alt="thumb" />
-          <img src="../assets/image-product-3-thumbnail.jpg" alt="thumb" />
-          <img src="../assets/image-product-4-thumbnail.jpg" alt="thumb" />
+          <img
+            src="../assets/image-product-1-thumbnail.jpg"
+            alt="thumb"
+            @click="carousselImg(itemImages[0])"
+          />
+          <img
+            src="../assets/image-product-2-thumbnail.jpg"
+            alt="thumb"
+            @click="carousselImg(itemImages[1])"
+          />
+          <img
+            src="../assets/image-product-3-thumbnail.jpg"
+            alt="thumb"
+            @click="carousselImg(itemImages[2])"
+          />
+          <img
+            src="../assets/image-product-4-thumbnail.jpg"
+            alt="thumb"
+            @click="carousselImg(itemImages[3])"
+          />
         </div>
       </section>
       <section class="datas_wrapper">
@@ -26,8 +42,8 @@
           {{ item.infos }}
         </p>
         <p class="reduced_price">
-          <strong>$125.00</strong>
-          <span>50%</span>
+          <strong>${{ promotedPrice(item.price, item.reduction) }}</strong>
+          <span>{{ item.reduction }}%</span>
         </p>
         <p class="original_price">${{ item.price }}</p>
         <div class="cart_wrapper">
@@ -59,6 +75,14 @@ export default {
       caroussel: false,
       errMsg: '',
       items: [],
+      itemImages: [
+        require('@/assets/image-product-1.jpg'),
+        require('@/assets/image-product-2.jpg'),
+        require('@/assets/image-product-3.jpg'),
+        require('@/assets/image-product-4.jpg'),
+      ],
+      picture: require('@/assets/image-product-1.jpg'),
+      itemImagesIndex: 0,
     };
   },
   mounted() {
@@ -92,6 +116,29 @@ export default {
         alert('cart saved');
       }
     },
+    promotedPrice(price, promotion) {
+      let promoted = price * (promotion / 100);
+      return promoted;
+    },
+    carousselImg(image = null) {
+      this.picture = image;
+    },
+    carousselSlides(bin) {
+      if (bin === 1) {
+        this.itemImagesIndex += bin;
+      } else if (bin === -1) {
+        this.itemImagesIndex -= bin;
+      } else {
+        this.itemImagesIndex = bin;
+      }
+
+      if (this.itemImagesIndex > 3) {
+        this.itemImagesIndex = 0;
+      } else if (this.itemImagesIndex < 0) {
+        this.itemImagesIndex = 3;
+      }
+      this.picture = this.itemImages[this.itemImagesIndex];
+    },
   },
 };
 </script>
@@ -123,6 +170,14 @@ img {
 .image_big_wrapper img {
   width: inherit;
   object-fit: cover;
+  cursor: pointer;
+}
+.active {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  width: calc(var(--desktop-large-img) + 75px);
 }
 .caroussel_closer,
 .circle {
@@ -137,20 +192,21 @@ img {
   width: 30px;
   height: 30px;
   background-image: url(../assets/icon-close.svg);
+  background-size: 50%;
   position: absolute;
   right: 0;
   top: -40px;
   transition: 0.4s;
 }
 .caroussel_closer:hover {
-  transform: scale(1.2);
+  transform: scale(1.3);
 }
 .carroussel_swappers {
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: absolute;
-  top: 35%;
+  top: 37%;
   left: -25px;
   right: -25px;
 }
