@@ -113,7 +113,7 @@ export default {
         this.errMsg = 'unable to save this value to cart';
       } else {
         this.errMsg = '';
-        alert('cart saved');
+        this.$store.commit('updateCart', { name: 'toto' });
       }
     },
     promotedPrice(price, promotion) {

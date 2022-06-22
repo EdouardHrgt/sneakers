@@ -29,7 +29,7 @@
         <div class="cart">
           <div class="cart_icon_wrapper">
             <img src="../assets/icon-cart.svg" alt="Access to your cart" @click="toggleCart()" />
-            <p class="cart_item_number" v-show="cartNumber">{{ cartNumber }}</p>
+            <p class="cart_item_number" v-show="count">{{ count }}</p>
           </div>
           <div class="cart_list" v-show="showCart">
             <strong>Cart</strong>
@@ -61,6 +61,11 @@ export default {
       showCart: false,
       isActive: false,
     };
+  },
+  computed: {
+    count() {
+      return this.$store.state.cartList.length;
+    },
   },
   methods: {
     toggleCart() {
