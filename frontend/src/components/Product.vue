@@ -4,7 +4,7 @@
     <main class="product_wrapper" v-for="item in items" :key="item.name">
       <section class="images_wrapper" :class="{ active: caroussel }">
         <div class="image_big_wrapper">
-          <div class="caroussel_closer" v-show="caroussel" @click="carousselImg()"></div>
+          <div class="caroussel_closer" v-show="caroussel" @click="caroussel = !caroussel"></div>
           <img :src="picture" alt="a pair of sneakers" @click="caroussel = !caroussel" />
 
           <div class="carroussel_swappers" v-show="caroussel">
@@ -52,7 +52,7 @@
             <p class="quantity">{{ itemQty }}</p>
             <img src="../assets/icon-plus.svg" alt="add 1 to quantity" @click="incrementCart" />
           </div>
-          <button @click="addToCart">
+          <button @click="addToCart(item)" :class="{ itemAdded: isAdded }">
             <img src="../assets/icon-cart.svg" alt="Add to Cart" />
             Add to cart
           </button>
@@ -83,6 +83,7 @@ export default {
       ],
       picture: require('@/assets/image-product-1.jpg'),
       itemImagesIndex: 0,
+      isAdded: false,
     };
   },
   mounted() {
@@ -108,12 +109,37 @@ export default {
         this.itemQty -= 1;
       }
     },
-    addToCart() {
+    addToCart(obj) {
       if (this.itemQty > 10 || this.itemQty <= 0) {
         this.errMsg = 'unable to save this value to cart';
       } else {
         this.errMsg = '';
-        this.$store.commit('updateCart', { name: 'toto' });
+        const total = this.itemQty * (obj.price * (obj.reduction / 100));
+        const promoted = this.promotedPrice(obj.price, obj.reduction);
+
+        const product = {
+          ...obj,
+          quantity: this.itemQty,
+          total,
+          promoted,
+        };
+        this.checkDuplicate(product);
+        this.itemQty = 0;
+        this.isAdded = true;
+        setTimeout(() => {
+          this.isAdded = false;
+        }, 1000);
+      }
+    },
+    checkDuplicate(item) {
+      let cartList = this.$store.state.cartList;
+      const cartlistIndex = cartList.findIndex((o) => o.name == item.name);
+
+      if (cartlistIndex != -1) {
+        const newQty = (cartList[cartlistIndex].quantity += item.quantity);
+        cartList[cartlistIndex].quantity = newQty;
+      } else {
+        this.$store.commit('updateCart', item);
       }
     },
     promotedPrice(price, promotion) {
@@ -326,6 +352,9 @@ img {
 .err_msg {
   color: var(--orange);
   margin-top: 1rem;
+}
+.itemAdded {
+  animation: fadeUp 0.5s;
 }
 @media screen and (max-width: 1450px) {
   .product_wrapper {

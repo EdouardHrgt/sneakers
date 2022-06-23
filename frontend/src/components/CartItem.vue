@@ -1,14 +1,21 @@
 <template>
   <div>
-    <div class="cart_item_wrapper">
+    <div class="cart_item_wrapper" v-for="(item, i) in cartList" :key="i">
       <img src="../assets/image-product-1-thumbnail.jpg" alt="#" class="item_img" />
       <div class="item_infos_wrapper">
-        <p>Fall Limited Edition Sneakers</p>
-        <p>$125.00 x 3 <strong>$375.00</strong></p>
+        <p>{{ item.name }}</p>
+        <p>
+          ${{ item.promoted }} x {{ item.quantity }} <strong>${{ item.total }}</strong>
+        </p>
       </div>
-      <img src="../assets/icon-delete.svg" alt="Delete Item" class="delete_item" />
+      <img
+        src="../assets/icon-delete.svg"
+        alt="Delete Item"
+        class="delete_item"
+        @click="deleteItem(i)"
+      />
     </div>
-    <div class="checkout_btn">
+    <div class="checkout_btn" v-if="cartList.length > 0">
       <button>Checkout</button>
     </div>
   </div>
@@ -17,6 +24,17 @@
 <script>
 export default {
   name: 'CartItem',
+  computed: {
+    cartList() {
+      return this.$store.state.cartList;
+    },
+  },
+  methods: {
+    deleteItem(index) {
+      let cart = this.$store.state.cartList;
+      cart.splice(index, 1);
+    },
+  },
 };
 </script>
 

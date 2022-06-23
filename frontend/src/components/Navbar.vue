@@ -19,9 +19,6 @@
           <li :class="{ activeList: isActive }"><router-link to="/men">Men</router-link></li>
           <li :class="{ activeList: isActive }"><router-link to="/women">Women</router-link></li>
           <li :class="{ activeList: isActive }"><router-link to="/about">About</router-link></li>
-          <li :class="{ activeList: isActive }">
-            <router-link to="/contact">Contact</router-link>
-          </li>
         </ul>
       </nav>
 
@@ -33,8 +30,8 @@
           </div>
           <div class="cart_list" v-show="showCart">
             <strong>Cart</strong>
-            <p v-if="itemList.length === 0">Your cart is empty.</p>
-            <CartItem v-if="itemList.length > 0" />
+            <p v-if="count <= 0">Your cart is empty.</p>
+            <CartItem />
           </div>
         </div>
 

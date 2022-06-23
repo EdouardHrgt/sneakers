@@ -41,4 +41,13 @@
   box-sizing: border-box;
   font-family: var(--font);
 }
+@keyframes fadeUp {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-400px);
+  }
+}
 </style>
