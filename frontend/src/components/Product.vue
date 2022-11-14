@@ -44,6 +44,7 @@
         <p class="reduced_price">
           <strong>${{ promotedPrice(item.price, item.reduction) }}</strong>
           <span>{{ item.reduction }}%</span>
+          <span id="mobile_price_display">250$</span>
         </p>
         <p class="original_price">${{ item.price }}</p>
         <div class="cart_wrapper">
@@ -92,6 +93,11 @@ export default {
       .then((res) => (this.items = res.data))
       .catch((err) => alert(err));
   },
+  computed: {
+    totalPrice(obj) {
+      return this.itemQty * (obj.price * (obj.reduction / 100));
+    },
+  },
   methods: {
     incrementCart() {
       if (this.itemQty === 10) {
@@ -131,17 +137,23 @@ export default {
         }, 1000);
       }
     },
+
     checkDuplicate(item) {
       let cartList = this.$store.state.cartList;
       const cartlistIndex = cartList.findIndex((o) => o.name == item.name);
 
       if (cartlistIndex != -1) {
         const newQty = (cartList[cartlistIndex].quantity += item.quantity);
+        const newTotal = (cartList[cartlistIndex].total +=
+          this.itemQty * (item.price * (item.reduction / 100)));
+        // next instructions are auto commited to vuex because VUEX is not in STRICT MODE
         cartList[cartlistIndex].quantity = newQty;
+        cartList[cartlistIndex].total = newTotal;
       } else {
         this.$store.commit('updateCart', item);
       }
     },
+
     promotedPrice(price, promotion) {
       let promoted = price * (promotion / 100);
       return promoted;
@@ -287,7 +299,8 @@ img {
   line-height: 110%;
 }
 .datas_wrapper .description,
-.original_price {
+.original_price,
+#mobile_price_display {
   color: var(--gray-blue);
 }
 .reduced_price {
@@ -305,6 +318,12 @@ img {
   border-radius: 5px;
   color: var(--orange);
   font-weight: var(--weight-2);
+}
+#mobile_price_display {
+  text-decoration: line-through;
+  font-size: 1.2rem;
+  background-color: transparent;
+  display: none;
 }
 .original_price {
   text-decoration: line-through;
@@ -394,8 +413,65 @@ img {
   }
 }
 @media screen and (max-width: 800px) {
+  img {
+    border-radius: 0;
+  }
+  .image_thumbnail_wrapper,
+  .image_thumbnail_wrapper img {
+    display: none;
+  }
   .product_wrapper {
-    background-color: rgb(98, 199, 113);
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+  }
+  .datas_wrapper {
+    padding: 1rem;
+    width: var(--large-img-breakpoint-1);
+  }
+  .datas_wrapper h1,
+  .datas_wrapper h2,
+  .description {
+    margin-bottom: 0.5rem;
+  }
+  .datas_wrapper h2 {
+    font-size: 2rem;
+  }
+  #mobile_price_display {
+    display: inline-block;
+    width: 100%;
+    text-align: end;
+  }
+  .original_price {
+    display: none;
+  }
+  .cart_wrapper {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .cart_wrapper div,
+  .cart_wrapper button {
+    width: 100%;
+    height: 3.5rem;
+  }
+  .cart_wrapper button {
+    justify-content: center;
+    margin: 0;
+  }
+  .cart_wrapper div {
+    padding: 0 2rem;
+  }
+  .err_msg {
+    text-align: center;
+    margin-top: 0.3rem;
+  }
+}
+@media screen and (max-width: 500px) {
+  .images_wrapper {
+    width: 100%;
+  }
+  .image_big_wrapper img {
+    max-height: 300px;
   }
 }
 </style>
