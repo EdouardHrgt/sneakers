@@ -14,11 +14,11 @@
         </h1>
         <ul :class="{ active: isActive }">
           <li :class="{ activeList: isActive }">
-            <router-link to="/collections">Collections</router-link>
+            <router-link to="/">Collections</router-link>
           </li>
-          <li :class="{ activeList: isActive }"><router-link to="/men">Men</router-link></li>
-          <li :class="{ activeList: isActive }"><router-link to="/women">Women</router-link></li>
-          <li :class="{ activeList: isActive }"><router-link to="/about">About</router-link></li>
+          <li :class="{ activeList: isActive }"><router-link to="/">Men</router-link></li>
+          <li :class="{ activeList: isActive }"><router-link to="/">Women</router-link></li>
+          <li :class="{ activeList: isActive }"><router-link to="/">About</router-link></li>
         </ul>
       </nav>
 
