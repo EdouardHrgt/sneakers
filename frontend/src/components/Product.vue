@@ -67,7 +67,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   name: 'Product',
   data() {
@@ -75,7 +74,16 @@ export default {
       itemQty: 0,
       caroussel: false,
       errMsg: '',
-      items: [],
+      items: [
+        {
+          brand: 'sneakers company',
+          name: 'Fall Limited Edition Sneakers',
+          price: 250,
+          reduction: 50,
+          infos:
+            "These low-profile sneakers are your perfect casual wear companion. Featuring a durable rubber outer sole, they'll withstand everything the weather can offer.",
+        },
+      ],
       itemImages: [
         require('@/assets/image-product-1.jpg'),
         require('@/assets/image-product-2.jpg'),
@@ -86,12 +94,6 @@ export default {
       itemImagesIndex: 0,
       isAdded: false,
     };
-  },
-  mounted() {
-    axios
-      .get('http://localhost:8080/static/items.json')
-      .then((res) => (this.items = res.data))
-      .catch((err) => alert(err));
   },
   computed: {
     totalPrice(obj) {
@@ -467,11 +469,29 @@ img {
   }
 }
 @media screen and (max-width: 500px) {
+  /* .images_wrapper {
+    width: 100%;
+  } */
+  /* .image_big_wrapper img {
+    max-height: 300px;
+  } */
+
   .images_wrapper {
     width: 100%;
   }
-  .image_big_wrapper img {
-    max-height: 300px;
+  .image_big_wrapper {
+    width: 100%;
+  }
+  .carroussel_swappers {
+    left: 0px;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .caroussel_closer {
+    width: 35px;
+    height: 35px;
+    right: 10px;
   }
 }
 </style>
