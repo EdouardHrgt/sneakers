@@ -483,8 +483,8 @@ img {
     width: 100%;
   }
   .carroussel_swappers {
-    left: 0px;
-    right: 0px;
+    left: 10px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -492,6 +492,10 @@ img {
     width: 35px;
     height: 35px;
     right: 10px;
+  }
+  .circle {
+    width: 35px;
+    height: 35px;
   }
 }
 </style>
